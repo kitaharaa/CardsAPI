@@ -4,4 +4,6 @@
     <string name="currency_flag">Currency flag</string>
     <string name="service_logo">Service logo</string>
     <string name="open_button">Open button</string>
+    <string name="successful_transactions">Successful transactions</string>
+    <string name="unsuccessful_transactions">Unsuccessful transactions</string>
 </resources>

@@ -19,12 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kitahara.cardsapitest.R
+import com.kitahara.cardsapitest.domain.formatMoney
 import com.kitahara.cardsapitest.presentation.main.templates.ContentBaseBack
-import java.text.NumberFormat
-import java.util.Locale
 
 @Composable
-fun AccountInfo(currency: String, sum: Int, sign: String, countryFlag: Int) {
+fun AccountInfo(currency: String, sum: Float, countryFlag: Int) {
     ContentBaseBack {
         Column(
             modifier = it,
@@ -54,7 +53,6 @@ fun AccountInfo(currency: String, sum: Int, sign: String, countryFlag: Int) {
                 )
             }
 
-            val formatter = NumberFormat.getNumberInstance(Locale.US)
             Text(
                 modifier = Modifier.padding(
                     start = 10.dp,
@@ -62,7 +60,7 @@ fun AccountInfo(currency: String, sum: Int, sign: String, countryFlag: Int) {
                 ),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                text = "$sign${formatter.format(sum)}"
+                text = formatMoney(sum)
             )
         }
     }
