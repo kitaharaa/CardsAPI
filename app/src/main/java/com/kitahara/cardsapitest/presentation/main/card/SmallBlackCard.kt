@@ -1,4 +1,4 @@
-package com.kitahara.cardsapitest.presentation.main
+package com.kitahara.cardsapitest.presentation.main.card
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
@@ -33,7 +33,7 @@ import com.kitahara.cardsapitest.presentation.ui.theme.CardInner
 
 @Composable
 @Preview
-fun CardItem(
+fun SmallBlackCard(
     modifier: Modifier = Modifier,
     lastFour: String = "5523",
     logoUrl: String = "https://spendbase.s3.eu-central-1.amazonaws.com/users/4/picture.png%3F1676305861461",

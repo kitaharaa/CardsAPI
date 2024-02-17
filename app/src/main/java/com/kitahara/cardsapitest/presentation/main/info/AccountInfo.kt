@@ -1,4 +1,4 @@
-package com.kitahara.cardsapitest.presentation.main
+package com.kitahara.cardsapitest.presentation.main.info
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
