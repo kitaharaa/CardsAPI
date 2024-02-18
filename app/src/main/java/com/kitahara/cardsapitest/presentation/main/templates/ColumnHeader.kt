@@ -15,7 +15,11 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.layoutId
 
 @Composable
-fun ColumnHeader(titleContent: String, onSeeAllClicked: () -> Unit) {
+fun ColumnHeader(
+    titleContent: String,
+    isSeeAllVisible: Boolean = true,
+    onSeeAllClicked: () -> Unit
+) {
     val constraintSet = ConstraintSet {
         val title = createRefFor("headerTitle")
         val seeAll = createRefFor("seeAll")
@@ -44,16 +48,17 @@ fun ColumnHeader(titleContent: String, onSeeAllClicked: () -> Unit) {
             fontWeight = FontWeight.SemiBold
         )
 
-        Text(
-            modifier = Modifier
-                .layoutId("seeAll")
-                .clickable {
-                    onSeeAllClicked()
-                },
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 20.sp,
-            text = "See all",
-            textDecoration = TextDecoration.Underline
-        )
+        if (isSeeAllVisible)
+            Text(
+                modifier = Modifier
+                    .layoutId("seeAll")
+                    .clickable {
+                        onSeeAllClicked()
+                    },
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 20.sp,
+                text = "See all",
+                textDecoration = TextDecoration.Underline
+            )
     }
 }

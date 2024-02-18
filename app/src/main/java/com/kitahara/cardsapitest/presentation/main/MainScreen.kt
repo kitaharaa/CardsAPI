@@ -9,12 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kitahara.cardsapitest.R
-import com.kitahara.cardsapitest.presentation.SharedViewModel
+import com.kitahara.cardsapitest.data.cards_dto.CardInfo
+import com.kitahara.cardsapitest.data.transactions.TransactionInfo
 import com.kitahara.cardsapitest.presentation.main.card.MyCards
 import com.kitahara.cardsapitest.presentation.main.info.AccountInfo
 import com.kitahara.cardsapitest.presentation.main.recent_transactions.RecentTransactions
@@ -22,11 +21,12 @@ import com.kitahara.cardsapitest.presentation.main.recent_transactions.RecentTra
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    viewModel: SharedViewModel,
-    navigateCardDetails: (String) -> Unit
+    cards: List<CardInfo>?,
+    transactions: List<TransactionInfo>?,
+    navigateCardDetails: (String) -> Unit,
+    onAllCardsPressed: () -> Unit,
+    onAllRecentTransactionsPressed: () -> Unit,
 ) {
-    val cards by viewModel.cardsFlow.collectAsState()
-    val recentTransactions by viewModel.transactionsFlow.collectAsState()
 
     Scaffold(
         modifier = modifier,
@@ -51,9 +51,17 @@ fun MainScreen(
                 countryFlag = R.drawable.united_states_of_america
             )
 
-            MyCards(cards, navigateCardDetails)
+            MyCards(cards = cards, onCardClicked = navigateCardDetails) {
+                onAllCardsPressed()
+            }
 
-            RecentTransactions(recentTransactions = recentTransactions)
+            RecentTransactions(
+                recentTransactions = transactions,
+                onAllRecentTransactionsPressed = onAllRecentTransactionsPressed,
+                shouldUseLimit = true,
+                shouldShowSeeAll = true,
+                shouldUseCardForBackground = true
+            )
         }
     }
 }

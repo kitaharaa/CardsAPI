@@ -25,6 +25,7 @@ import androidx.constraintlayout.compose.layoutId
 import com.kitahara.cardsapitest.R
 import com.kitahara.cardsapitest.domain.formatMoney
 import com.kitahara.cardsapitest.presentation.main.service_icon.ServiceIcon
+import com.kitahara.cardsapitest.presentation.ui.theme.Transfer
 
 @Composable
 @Preview
@@ -120,8 +121,8 @@ fun SpecificCardTransactionsItem(
                         textDecoration = if (status == "Success") TextDecoration.None
                         else TextDecoration.LineThrough,
                         color = if (operationSum.toString()
-                                .contains("-")
-                        ) Color.Red else Color.Unspecified
+                                .contains("-").not()
+                        ) Transfer else Color.Black
                     )
                 ) {
                     append(formatMoney(operationSum))
