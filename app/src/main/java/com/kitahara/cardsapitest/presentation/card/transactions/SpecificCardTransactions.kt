@@ -2,6 +2,7 @@
 
 package com.kitahara.cardsapitest.presentation.card.transactions
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -16,20 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kitahara.cardsapitest.data.Transaction
+import com.kitahara.cardsapitest.data.transactions.TransactionInfo
 import com.kitahara.cardsapitest.presentation.main.templates.ContentBaseBack
 
 @Composable
 fun SpecificCardTransactions(
-    operations: List<Transaction>,
-    headers: Set<String>,
-    matchingItems: (String) -> List<Transaction>
+    operations: List<TransactionInfo>?,
+    headers: Set<String>?,
+    matchingItems: (String) -> List<TransactionInfo>,
 ) {
+    Log.e("SpecificCardTransactions", "operations = $operations,\n headers = $headers\n matchingItems = $matchingItems", )
     ContentBaseBack(modifier = Modifier.padding(top = 15.dp)) {
         LazyColumn(it.padding(top = 20.dp)) {
+
+            val background: Color = Color.Unspecified
             val dateHeader: (time: String) -> Unit = { time ->
                 stickyHeader {
-                    Column(Modifier.background(Color.White)) {//todo change color
+                    Column(Modifier.background(background)) {
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -47,16 +51,16 @@ fun SpecificCardTransactions(
                 }
             }
 
-            if (operations.isNotEmpty() && headers.isNotEmpty()) {
+            if (operations?.isNotEmpty() == true && !headers.isNullOrEmpty()) {
                 headers.forEach { time ->
                     dateHeader(time)
 
                     items(matchingItems(time)) { transactionInfo ->
                         SpecificCardTransactionsItem(
-                            service = transactionInfo.service,
-                            operationSum = transactionInfo.operationSum,
+                            service = transactionInfo.merchant?.name ?: "Unknown",
+                            operationSum = transactionInfo.amount ?: 0f,
                             status = transactionInfo.status,
-                            logoUrl = transactionInfo.logoUrl
+                            logoUrl = transactionInfo.card?.cardHolder?.logoUrl.toString()
                         )
                     }
                 }

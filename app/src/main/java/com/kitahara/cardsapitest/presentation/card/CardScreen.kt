@@ -2,6 +2,7 @@
 
 package com.kitahara.cardsapitest.presentation.card
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,10 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.kitahara.cardsapitest.R
 import com.kitahara.cardsapitest.presentation.SharedViewModel
 import com.kitahara.cardsapitest.presentation.card.options.CardOptions
@@ -36,16 +35,18 @@ import com.kitahara.cardsapitest.presentation.card.transactions.SpecificCardTran
 import com.kitahara.cardsapitest.presentation.main.service_icon.ServiceIcon
 
 @Composable
-@Preview
 fun CardScreen(
     modifier: Modifier = Modifier,
     serviceIconUrl: String = "https://spendbase.s3.eu-central-1.amazonaws.com/users/4/picture.png%3F1676305861461",
     serviceName: String = "Slack",
-    cardsLastFour: String = "5531"
+    cardsLastFour: String = "5531",
+    viewModel: SharedViewModel,
+    cardId: String,
+    navBack: () -> Unit
 ) {
-    val viewModel = hiltViewModel<SharedViewModel>()
+    viewModel.extractTransactionWithCardId(cardId)
 
-    val operations by viewModel.transactionFlow.collectAsState()
+    val operations by viewModel.specificTransactionsFlow.collectAsState()
     val headers by viewModel.headersFlow.collectAsState()
 
     Scaffold(
@@ -84,12 +85,12 @@ fun CardScreen(
                 navigationIcon = {
                     IconButton(
                         modifier = Modifier.size(44.dp),
-                        onClick = { /*TODO*/ }) {
+                        onClick = navBack
+                    ) {
                         Icon(
                             painterResource(id = R.drawable.arrow_left),
                             "Go Back Button"
                         )
-
                     }
                 }
             )
@@ -105,7 +106,6 @@ fun CardScreen(
             ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             HalfCard()
 
             //todo implement
@@ -120,6 +120,11 @@ fun CardScreen(
                 headers = headers,
                 matchingItems = { viewModel.getMatchingItems(it) }
             )
+        }
+
+        BackHandler {
+            viewModel.clearCardData()
+            navBack()
         }
     }
 }

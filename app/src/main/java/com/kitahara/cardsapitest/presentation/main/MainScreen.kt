@@ -9,19 +9,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kitahara.cardsapitest.R
+import com.kitahara.cardsapitest.presentation.SharedViewModel
 import com.kitahara.cardsapitest.presentation.main.card.MyCards
 import com.kitahara.cardsapitest.presentation.main.info.AccountInfo
 import com.kitahara.cardsapitest.presentation.main.recent_transactions.RecentTransactions
 
 @Composable
-@Preview
 fun MainScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: SharedViewModel,
+    navigateCardDetails: (String) -> Unit
 ) {
+    val cards by viewModel.cardsFlow.collectAsState()
+    val recentTransactions by viewModel.transactionsFlow.collectAsState()
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -45,9 +51,9 @@ fun MainScreen(
                 countryFlag = R.drawable.united_states_of_america
             )
 
-            MyCards()
+            MyCards(cards, navigateCardDetails)
 
-            RecentTransactions()
+            RecentTransactions(recentTransactions = recentTransactions)
         }
     }
 }

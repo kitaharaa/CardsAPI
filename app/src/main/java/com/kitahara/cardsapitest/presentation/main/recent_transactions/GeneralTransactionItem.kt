@@ -32,11 +32,14 @@ import com.kitahara.cardsapitest.presentation.main.service_icon.ServiceIcon
 @Preview
 fun GeneralTransactionItem(
     service: String = "Slack",
-    lastFour: String = "4343",
-    operationSum: Float = 411.32f,
+    lastFour: String? = "4343",
+    operationSum: Float? = 411.32f,
     status: String = "Success",
-    logoUrl: String = "https://spendbase.s3.eu-central-1.amazonaws.com/users/4/picture.png%3F1676305861461",
+    logoUrl: String? = "https://spendbase.s3.eu-central-1.amazonaws.com/users/4/picture.png%3F1676305861461",
 ) {
+
+    if (operationSum == null)
+        return
 
     val constraintSet = ConstraintSet {
         val serviceIcon = createRefFor("serviceIcon")
@@ -100,12 +103,13 @@ fun GeneralTransactionItem(
                 fontSize = 16.sp
             )
 
-            Text(
-                modifier = Modifier,
-                color = Color.Gray,
-                text = "••$lastFour",
-                fontSize = 12.sp
-            )
+            if (lastFour != null)
+                Text(
+                    modifier = Modifier,
+                    color = Color.Gray,
+                    text = "••$lastFour",
+                    fontSize = 12.sp
+                )
         }
 
         val (icon, description) = if (status == "Success") {
