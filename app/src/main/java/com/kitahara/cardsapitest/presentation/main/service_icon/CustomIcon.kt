@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -16,7 +17,14 @@ import com.kitahara.cardsapitest.R
 import com.kitahara.cardsapitest.presentation.main.templates.CustomAsyncImage
 
 @Composable
-fun ServiceIcon(modifier: Modifier, size: Dp, iconSize: Dp, url: String?, onClick: () -> Unit = {}) {
+fun CustomIcon(
+    modifier: Modifier = Modifier,
+    size: Dp,
+    iconSize: Dp,
+    url: String?,
+    defaultIcon: Painter = painterResource(id = R.drawable.credit_card),
+    onClick: () -> Unit = {}
+) {
     IconButton(
         modifier = modifier
             .size(size)
@@ -26,10 +34,10 @@ fun ServiceIcon(modifier: Modifier, size: Dp, iconSize: Dp, url: String?, onClic
             containerColor = Color.White
         )
     ) {
-        if(url == null) {
+        if (url == null) {
             Icon(
                 modifier = Modifier.size(iconSize),
-                painter = painterResource(id = R.drawable.credit_card),
+                painter = defaultIcon,
                 contentDescription = stringResource(R.string.service_logo)
             )
         } else {

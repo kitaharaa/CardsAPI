@@ -32,7 +32,7 @@ import com.kitahara.cardsapitest.R
 import com.kitahara.cardsapitest.presentation.SharedViewModel
 import com.kitahara.cardsapitest.presentation.card.options.CardOptions
 import com.kitahara.cardsapitest.presentation.card.transactions.SpecificCardTransactions
-import com.kitahara.cardsapitest.presentation.main.service_icon.ServiceIcon
+import com.kitahara.cardsapitest.presentation.main.service_icon.CustomIcon
 
 @Composable
 fun CardScreen(
@@ -42,6 +42,7 @@ fun CardScreen(
     cardsLastFour: String = "5531",
     viewModel: SharedViewModel,
     cardId: String,
+    onCardDetailClicked: () -> Unit,
     navBack: () -> Unit
 ) {
     viewModel.extractTransactionWithCardId(cardId)
@@ -55,7 +56,7 @@ fun CardScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        ServiceIcon(
+                        CustomIcon(
                             modifier = Modifier,
                             size = 40.dp,
                             iconSize = 21.dp,
@@ -110,7 +111,7 @@ fun CardScreen(
 
             //todo implement
             CardOptions(
-                onDetails = {},
+                onDetails = onCardDetailClicked,
                 onLock = {},
                 onTerminate = {}
             )

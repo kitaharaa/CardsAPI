@@ -1,5 +1,13 @@
 package com.kitahara.cardsapitest.data
 
-enum class BottomSheetContent(val title: String) {
-    Cards("All cards"), Transactions("All transactions");
+sealed class BottomSheetContent(
+    val title: String
+) {
+    data object Cards : BottomSheetContent("All cards")
+
+    data object Transactions : BottomSheetContent("All transactions")
+
+    data object CardInfo : BottomSheetContent("About card owner") {
+        var cardId: String? = null
+    }
 }

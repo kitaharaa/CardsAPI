@@ -84,8 +84,16 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+    fun getCardInfoById(id: String): CardInfo? {
+        return _cardsFlow.value?.find { it.id == id }
+    }
+
     fun clearCardData() {
         _headersFlow.value = setOf()
         _specificTransactionsFlow.value = listOf()
+    }
+
+    fun getCardNameById(argument: String): String {
+        return getCardInfoById(argument)?.cardName ?: "Card"
     }
 }

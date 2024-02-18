@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.layoutId
-import com.kitahara.cardsapitest.presentation.main.service_icon.ServiceIcon
+import com.kitahara.cardsapitest.presentation.main.service_icon.CustomIcon
 import com.kitahara.cardsapitest.presentation.ui.theme.CardBorder
 import com.kitahara.cardsapitest.presentation.ui.theme.CardInner
 
@@ -78,7 +78,7 @@ fun SmallBlackCard(
                 }
             }
 
-            ServiceIcon(modifier = Modifier.layoutId("iconButton") ,
+            CustomIcon(modifier = Modifier.layoutId("iconButton") ,
                 size = 28.dp,
                 url = logoUrl,
                 iconSize = 17.dp,

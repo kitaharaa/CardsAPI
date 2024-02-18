@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     var bottomSheetContent by remember {
-                        mutableStateOf(BottomSheetContent.Cards)
+                        mutableStateOf<BottomSheetContent>(BottomSheetContent.Cards)
                     }
 
                     NavHost(
@@ -86,7 +86,18 @@ class MainActivity : ComponentActivity() {
                         ) {
                             val argument =
                                 it.arguments?.getString(pickedCardId) ?: return@composable
-                            CardScreen(viewModel = viewModel, cardId = argument) {
+                            CardScreen(
+                                viewModel = viewModel,
+                                serviceName = viewModel.getCardNameById(argument),
+                                cardId = argument,
+                                onCardDetailClicked = {
+                                    bottomSheetContent = BottomSheetContent.CardInfo.also {
+                                        it.cardId = argument
+                                    }
+
+                                    showBottomSheet = true
+                                }
+                            ) {
                                 navController.popBackStack()
                             }
                         }
@@ -98,13 +109,13 @@ class MainActivity : ComponentActivity() {
                         cards = cards,
                         transactions = transactions,
                         hideSheet = { showBottomSheet = !showBottomSheet },
+                        requestCardInfo = viewModel::getCardInfoById,
                         navigateCardInfo = {
                             navController.navigate(
                                 AppNavigation.CardScreen.destination + "/$it"
                             )
-                        },
-
-                        )
+                        }
+                    )
                 }
             }
         }

@@ -24,7 +24,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.layoutId
 import com.kitahara.cardsapitest.R
 import com.kitahara.cardsapitest.domain.formatMoney
-import com.kitahara.cardsapitest.presentation.main.service_icon.ServiceIcon
+import com.kitahara.cardsapitest.presentation.main.service_icon.CustomIcon
 import com.kitahara.cardsapitest.presentation.ui.theme.Transfer
 
 @Composable
@@ -77,7 +77,7 @@ fun SpecificCardTransactionsItem(
             .padding(vertical = 5.dp),
         constraintSet = constraintSet
     ) {
-        ServiceIcon(
+        CustomIcon(
             modifier = Modifier.layoutId("serviceIcon"),
             size = 36.dp,
             url = logoUrl,
