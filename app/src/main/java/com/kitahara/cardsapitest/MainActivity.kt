@@ -14,15 +14,17 @@ import com.kitahara.cardsapitest.data.navigation.AppNavigation
 import com.kitahara.cardsapitest.presentation.card.CardScreen
 import com.kitahara.cardsapitest.presentation.main.MainScreen
 import com.kitahara.cardsapitest.presentation.ui.theme.CardsAPITestTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             CardsAPITestTheme {
-                // A surface container using the 'background' color from the theme
-
                 val navController = rememberNavController()
+
+                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

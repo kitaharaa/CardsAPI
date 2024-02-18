@@ -14,7 +14,7 @@ import com.kitahara.cardsapitest.R
 import com.kitahara.cardsapitest.presentation.main.templates.CustomAsyncImage
 
 @Composable
-fun ServiceIcon(modifier: Modifier, size: Dp, iconSize: Dp, url: String, onClick: () -> Unit) {
+fun ServiceIcon(modifier: Modifier, size: Dp, iconSize: Dp, url: String, onClick: () -> Unit = {}) {
     IconButton(
         modifier = modifier
             .size(size)

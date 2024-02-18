@@ -8,9 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ContentBaseBack(content: @Composable (Modifier) -> Unit) {
+fun ContentBaseBack(modifier: Modifier = Modifier, content: @Composable (Modifier) -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         content(
             Modifier
