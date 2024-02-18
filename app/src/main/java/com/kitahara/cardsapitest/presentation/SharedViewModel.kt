@@ -3,6 +3,7 @@ package com.kitahara.cardsapitest.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kitahara.cardsapitest.data.RequestType
 import com.kitahara.cardsapitest.data.cards_dto.CardInfo
 import com.kitahara.cardsapitest.data.cards_dto.CardsData
 import com.kitahara.cardsapitest.data.transactions.Transaction
@@ -36,22 +37,15 @@ class SharedViewModel @Inject constructor(
     private val _specificTransactionsFlow = MutableStateFlow<List<TransactionInfo>?>(listOf())
     val specificTransactionsFlow = _specificTransactionsFlow.asStateFlow()
 
-    init {
-        viewModelScope.launch(Dispatchers.Default) {
-            _cardsFlow.emit(client.get("https://dev.spendbase.co/cards").body<CardsData>().cards)
-
-            val transactions = client.get("https://dev.spendbase.co/cards/transactions")
-                .body<Transaction>().transactions?.sortedBy {
-                    ZonedDateTime.parse(it.completeDate).toLocalDateTime().toString()
-                }
-
-            Log.e("transactions", transactions.toString())
-
-            withContext(Dispatchers.Main) {
-                _transactionsFlow.emit(transactions)
-
-            }
+    private val doInMain: suspend (suspend () -> Unit) -> Unit = {
+        withContext(Dispatchers.Main) {
+            it.invoke()
         }
+    }
+
+    init {
+        requestDataAgain(RequestType.Transactions)
+        requestDataAgain(RequestType.Cards)
     }
 
     fun getMatchingItems(time: String): List<TransactionInfo> {
@@ -59,8 +53,71 @@ class SharedViewModel @Inject constructor(
             ?: emptyList()
     }
 
+    fun getCardInfoById(id: String): CardInfo? {
+        return _cardsFlow.value?.find { it.id == id }
+    }
+
+    fun clearCardData() {
+        _headersFlow.value = setOf()
+        _specificTransactionsFlow.value = listOf()
+    }
+
+    fun getCardNameById(argument: String): String {
+        return getCardInfoById(argument)?.cardName ?: "Card"
+    }
+
+    fun requestDataAgain(it: RequestType) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (it) {
+                RequestType.Cards -> {
+                    doInMain {
+                        _cardsFlow.emit(emptyList())
+                    }
+
+                    val cards = try {
+                        client.get("https://dev.spendbase.co/cards").body<CardsData>().cards
+                    } catch (e: Exception) {
+                        null
+                    }
+
+                    doInMain {
+                        Log.e("cards", cards.toString())
+
+                        _cardsFlow.emit(
+                            cards
+                        )
+                    }
+                }
+
+                RequestType.Transactions -> {
+                    doInMain {
+                        _transactionsFlow.emit(emptyList())
+                    }
+
+                    val transactions = makeTransactionRequest()
+
+                    doInMain {
+                        Log.e("transactions", transactions.toString())
+
+                        _transactionsFlow.emit(transactions)
+                    }
+                }
+
+
+            }
+        }
+    }
+
     fun extractTransactionWithCardId(cardId: String) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (_transactionsFlow.value.isNullOrEmpty()) {
+                val response = makeTransactionRequest()
+
+                doInMain {
+                    _transactionsFlow.emit(response)
+                }
+            }
+
             val cardOperations = _transactionsFlow
                 .value
                 ?.filter { info ->
@@ -75,25 +132,21 @@ class SharedViewModel @Inject constructor(
             Log.e("SpecificHeaders", headers.toString())
 
             withContext(Dispatchers.Main) {
+                _headersFlow.emit(headers)
+
                 _specificTransactionsFlow.emit(
                     cardOperations
                 )
-
-                _headersFlow.emit(headers)
             }
         }
     }
 
-    fun getCardInfoById(id: String): CardInfo? {
-        return _cardsFlow.value?.find { it.id == id }
-    }
-
-    fun clearCardData() {
-        _headersFlow.value = setOf()
-        _specificTransactionsFlow.value = listOf()
-    }
-
-    fun getCardNameById(argument: String): String {
-        return getCardInfoById(argument)?.cardName ?: "Card"
+    private suspend fun makeTransactionRequest() = try {
+        client.get("https://dev.spendbase.co/cards/transactions")
+            .body<Transaction>().transactions?.sortedBy {
+                ZonedDateTime.parse(it.completeDate).toLocalDateTime().toString()
+            }
+    } catch (e: Exception) {
+        null
     }
 }

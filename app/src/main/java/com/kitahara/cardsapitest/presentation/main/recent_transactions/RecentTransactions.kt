@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.kitahara.cardsapitest.data.transactions.TransactionInfo
 import com.kitahara.cardsapitest.presentation.main.templates.ColumnHeader
 import com.kitahara.cardsapitest.presentation.main.templates.ContentBaseBack
+import com.kitahara.cardsapitest.presentation.request_state_handler.HandleRemoteContentLoading
 
 @Composable
 fun RecentTransactions(
@@ -19,6 +20,7 @@ fun RecentTransactions(
     shouldUseLimit: Boolean,
     shouldUseCardForBackground: Boolean,
     shouldShowSeeAll: Boolean = true,
+    requestRestart: () -> Unit,
     onAllRecentTransactionsPressed: () -> Unit
 ) {
     val content: @Composable (Modifier?) -> Unit = {
@@ -33,23 +35,26 @@ fun RecentTransactions(
                 onSeeAllClicked = onAllRecentTransactionsPressed,
                 isSeeAllVisible = shouldShowSeeAll
             )
+            HandleRemoteContentLoading(
+                content = {
+                    val limit = if (shouldUseLimit) 0..2 else 0..(recentTransactions?.size ?: 1)
 
-            if (recentTransactions?.isNotEmpty() == true) {
-                val limit = if (shouldUseLimit) 0..2 else 0..(recentTransactions.size)
+                    limit.forEach { id ->
+                        val transaction = recentTransactions?.getOrNull(id) ?: return@forEach
 
-                limit.forEach { id ->
-                    val transaction = recentTransactions.getOrNull(id) ?: return@forEach
+                        GeneralTransactionItem(
+                            service = transaction.merchant?.name ?: "Unknown operation",
+                            lastFour = transaction.card?.cardLast4,
+                            operationSum = transaction.amount,
+                            status = transaction.status,
+                            logoUrl = transaction.card?.cardHolder?.logoUrl
+                        )
+                    }
+                },
 
-                    GeneralTransactionItem(
-                        service = transaction.merchant?.name ?: "Unknown operation",
-                        lastFour = transaction.card?.cardLast4,
-                        operationSum = transaction.amount,
-                        status = transaction.status,
-                        logoUrl = transaction.card?.cardHolder?.logoUrl
-                    )
-                }
-            } else {//todo handle}
-            }
+                state = recentTransactions,
+                restartRequest = requestRestart
+            )
         }
     }
 

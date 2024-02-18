@@ -65,11 +65,13 @@ class MainActivity : ComponentActivity() {
                                 transactions = transactions,
                                 navigateCardDetails = {
                                     navController.navigate(AppNavigation.CardScreen.destination + "/$it")
+                                    showBottomSheet = false
                                 },
                                 onAllRecentTransactionsPressed = {
                                     bottomSheetContent = BottomSheetContent.Transactions
                                     showBottomSheet = true
                                 },
+                                restartRequest = viewModel::requestDataAgain,
                                 onAllCardsPressed = {
                                     bottomSheetContent = BottomSheetContent.Cards
                                     showBottomSheet = true
@@ -110,10 +112,13 @@ class MainActivity : ComponentActivity() {
                         transactions = transactions,
                         hideSheet = { showBottomSheet = !showBottomSheet },
                         requestCardInfo = viewModel::getCardInfoById,
+                        onRequestData = viewModel::requestDataAgain,
                         navigateCardInfo = {
                             navController.navigate(
                                 AppNavigation.CardScreen.destination + "/$it"
                             )
+
+                            showBottomSheet = false
                         }
                     )
                 }

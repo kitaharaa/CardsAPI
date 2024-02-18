@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kitahara.cardsapitest.data.BottomSheetContent
+import com.kitahara.cardsapitest.data.RequestType
 import com.kitahara.cardsapitest.data.cards_dto.CardHolder
 import com.kitahara.cardsapitest.data.cards_dto.CardInfo
 import com.kitahara.cardsapitest.data.transactions.TransactionInfo
@@ -41,6 +42,7 @@ fun MyBottomSheet(
     navigateCardInfo: (String) -> Unit,
     cards: List<CardInfo>?,
     transactions: List<TransactionInfo>?,
+    onRequestData: (RequestType) -> Unit,
     requestCardInfo: (String) -> CardInfo?
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -77,6 +79,7 @@ fun MyBottomSheet(
 
                             hideSheet(false)
                         },
+                        restartRequest = { onRequestData(RequestType.Cards) },
                         onAllCardsPressed = {}
                     )
                 }
@@ -87,7 +90,8 @@ fun MyBottomSheet(
                         recentTransactions = transactions,
                         shouldUseCardForBackground = false,
                         shouldShowSeeAll = false,
-                        shouldUseLimit = false
+                        shouldUseLimit = false,
+                        requestRestart = { onRequestData(RequestType.Transactions) }
                     ) {}
                 }
 

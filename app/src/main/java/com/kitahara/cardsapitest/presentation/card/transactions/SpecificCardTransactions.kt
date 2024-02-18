@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class)
 
 package com.kitahara.cardsapitest.presentation.card.transactions
 
@@ -15,6 +15,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kitahara.cardsapitest.data.transactions.TransactionInfo
@@ -29,7 +31,17 @@ fun SpecificCardTransactions(
     Log.e("SpecificCardTransactions", "operations = $operations,\n headers = $headers\n matchingItems = $matchingItems", )
     ContentBaseBack(modifier = Modifier.padding(top = 15.dp)) {
         LazyColumn(it.padding(top = 20.dp)) {
-
+            item{
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 38.dp),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.SemiBold,
+                    text = "Activity",
+                    fontSize = 16.sp
+                )
+            }
             val background: Color = Color.Unspecified
             val dateHeader: (time: String) -> Unit = { time ->
                 stickyHeader {

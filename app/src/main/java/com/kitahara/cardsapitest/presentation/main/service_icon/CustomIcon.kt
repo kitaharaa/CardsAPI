@@ -34,7 +34,7 @@ fun CustomIcon(
             containerColor = Color.White
         )
     ) {
-        if (url == null) {
+        if (url == null || url == "null") {
             Icon(
                 modifier = Modifier.size(iconSize),
                 painter = defaultIcon,
