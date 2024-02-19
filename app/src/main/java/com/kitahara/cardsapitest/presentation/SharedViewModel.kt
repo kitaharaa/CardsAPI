@@ -1,6 +1,5 @@
 package com.kitahara.cardsapitest.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kitahara.cardsapitest.data.RequestType
@@ -81,8 +80,6 @@ class SharedViewModel @Inject constructor(
                     }
 
                     doInMain {
-                        Log.e("cards", cards.toString())
-
                         _cardsFlow.emit(
                             cards
                         )
@@ -97,8 +94,6 @@ class SharedViewModel @Inject constructor(
                     val transactions = makeTransactionRequest()
 
                     doInMain {
-                        Log.e("transactions", transactions.toString())
-
                         _transactionsFlow.emit(transactions)
                     }
                 }
@@ -127,9 +122,6 @@ class SharedViewModel @Inject constructor(
             val headers = cardOperations?.map {
                 formatTime(it.completeDate.toString()).toString()
             }?.toSet()
-
-            Log.e("cardOperations", cardOperations.toString())
-            Log.e("SpecificHeaders", headers.toString())
 
             withContext(Dispatchers.Main) {
                 _headersFlow.emit(headers)

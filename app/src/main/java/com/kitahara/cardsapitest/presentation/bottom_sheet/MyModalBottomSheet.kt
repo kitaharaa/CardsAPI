@@ -145,7 +145,6 @@ fun CardInfoContent(
         spent = 0
     )
 ) {
-    Log.e("Info", info.toString())
     Column(
         modifier = Modifier
             .fillMaxWidth()

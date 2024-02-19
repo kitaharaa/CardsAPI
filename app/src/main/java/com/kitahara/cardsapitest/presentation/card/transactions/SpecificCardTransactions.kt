@@ -2,7 +2,6 @@
 
 package com.kitahara.cardsapitest.presentation.card.transactions
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -28,10 +27,9 @@ fun SpecificCardTransactions(
     headers: Set<String>?,
     matchingItems: (String) -> List<TransactionInfo>,
 ) {
-    Log.e("SpecificCardTransactions", "operations = $operations,\n headers = $headers\n matchingItems = $matchingItems", )
     ContentBaseBack(modifier = Modifier.padding(top = 15.dp)) {
         LazyColumn(it.padding(top = 20.dp)) {
-            item{
+            item {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
